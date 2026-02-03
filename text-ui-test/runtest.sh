@@ -24,7 +24,7 @@ then
 fi
 
 # compile the code into the out folder
-javac -cp ../src/main/java -Xlint:none -d ../out/production/IP ../src/main/java/*.java
+javac -cp ../src/main/java -Xlint:none -d ../out/production/IP ../src/main/java/roshan/*.java
 if [ $? -ne 0 ]
 then
     echo "********** BUILD FAILURE **********"
@@ -32,7 +32,7 @@ then
 fi
 
 # run the program, feed commands from input.txt file and redirect the output to the ACTUAL.TXT
-java -classpath ../out/production/IP Roshan < input.txt > ACTUAL.TXT
+java -classpath ../out/production/IP roshan.Roshan < input.txt > ACTUAL.TXT
 
 # compare the output to the expected output
 diff ACTUAL.TXT EXPECTED.TXT

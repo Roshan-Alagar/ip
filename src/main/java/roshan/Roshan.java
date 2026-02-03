@@ -1,3 +1,5 @@
+package roshan;
+
 import java.util.Scanner;
 
 public class Roshan {
