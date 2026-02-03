@@ -23,38 +23,33 @@ public class Roshan {
             String input = in.nextLine();
             System.out.println(line);
 
-            if (input.equals("bye"))
-            {
+            if (input.equals("bye")) {
                 System.out.println("Bye. Hope to see you again soon!");
                 System.out.println(line);
                 break;
             }
-            else if (input.equals("list"))
-            {
+            else if (input.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < counter; i++) {
                     System.out.println(i + 1 + "." + tasks[i]);
                 }
                 System.out.println(line);
             }
-            else if (input.startsWith("mark "))
-            {
+            else if (input.startsWith("mark ")) {
                 int taskNumber = Integer.parseInt(input.substring(5)) - 1;
                 tasks[taskNumber].markAsDone();
                 System.out.println("Nice! I've marked this task as done:");
                 System.out.println("  " + tasks[taskNumber]);
                 System.out.println(line);
             }
-            else if (input.startsWith("unmark "))
-            {
+            else if (input.startsWith("unmark ")) {
                 int taskNumber = Integer.parseInt(input.substring(7)) - 1;
                 tasks[taskNumber].markAsNotDone();
                 System.out.println("OK, I've marked this task as not done yet:");
                 System.out.println("  " + tasks[taskNumber]);
                 System.out.println(line);
             }
-            else if (input.startsWith("todo "))
-            {
+            else if (input.startsWith("todo ")) {
                 String description = input.substring(5);
                 Task newTask = new Todo(description);
                 tasks[counter] = newTask;
@@ -64,8 +59,7 @@ public class Roshan {
                 System.out.println("Now you have " + counter + " tasks in the list.");
                 System.out.println(line);
             }
-            else if (input.startsWith("deadline "))
-            {
+            else if (input.startsWith("deadline ")) {
                 String commandContent = input.substring(9);
                 int byIndex = commandContent.indexOf("/by");
                 String description = commandContent.substring(0, byIndex).trim();
@@ -78,8 +72,7 @@ public class Roshan {
                 System.out.println("Now you have " + counter + " tasks in the list.");
                 System.out.println(line);
             }
-            else if (input.startsWith("event "))
-            {
+            else if (input.startsWith("event ")) {
                 String commandContent = input.substring(6);
                 int fromIndex = commandContent.indexOf("/from");
                 int toIndex = commandContent.indexOf("/to");
@@ -94,8 +87,7 @@ public class Roshan {
                 System.out.println("Now you have " + counter + " tasks in the list.");
                 System.out.println(line);
             }
-            else
-            {
+            else {
                 System.out.println("I don't understand that command!");
                 System.out.println(line);
             }
