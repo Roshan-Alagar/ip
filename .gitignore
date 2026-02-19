@@ -19,3 +19,15 @@ text-ui-test/EXPECTED-UNIX.TXT
 data/
 *.class
 out/
+
+# Gradle
+.gradle/
+build/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# JAR files
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+
