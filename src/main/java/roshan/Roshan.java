@@ -1,6 +1,7 @@
 package roshan;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Roshan {
     public static void main(String[] args) {
@@ -18,8 +19,7 @@ public class Roshan {
         System.out.println(line);
 
         Scanner in = new Scanner(System.in);
-        Task[] tasks = new Task[100];
-        int counter = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
 
         while (true) {
             try {
@@ -31,25 +31,25 @@ public class Roshan {
                     System.out.println(line);
                     break;
                 } else if (input.equals("list")) {
-                    System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < counter; i++) {
-                        System.out.println((i + 1) + "." + tasks[i]);
-                    }
+                    handleList(tasks);
                     System.out.println(line);
                 } else if (input.startsWith("mark ")) {
-                    counter = handleMark(input, tasks, counter);
+                    handleMark(input, tasks);
                     System.out.println(line);
                 } else if (input.startsWith("unmark ")) {
-                    counter = handleUnmark(input, tasks, counter);
+                    handleUnmark(input, tasks);
+                    System.out.println(line);
+                } else if (input.startsWith("delete ")) {
+                    handleDelete(input, tasks);
                     System.out.println(line);
                 } else if (input.startsWith("todo ")) {
-                    counter = handleTodo(input, tasks, counter);
+                    handleTodo(input, tasks);
                     System.out.println(line);
                 } else if (input.startsWith("deadline ")) {
-                    counter = handleDeadline(input, tasks, counter);
+                    handleDeadline(input, tasks);
                     System.out.println(line);
                 } else if (input.startsWith("event ")) {
-                    counter = handleEvent(input, tasks, counter);
+                    handleEvent(input, tasks);
                     System.out.println(line);
                 } else if (input.trim().equals("todo") || input.trim().equals("deadline") || input.trim().equals("event")) {
                     throw new RoshanException("OOPS!!! The description of a " + input.trim() + " cannot be empty.");
@@ -66,62 +66,81 @@ public class Roshan {
         }
     }
 
-    private static int handleMark(String input, Task[] tasks, int counter) throws RoshanException {
+    private static void handleList(ArrayList<Task> tasks) {
+        System.out.println("Here are the tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    private static void handleMark(String input, ArrayList<Task> tasks) throws RoshanException {
         String taskNumberStr = input.substring(5).trim();
         if (taskNumberStr.isEmpty()) {
             throw new RoshanException("OOPS!!! Please specify which task to mark.");
         }
         try {
             int taskNumber = Integer.parseInt(taskNumberStr) - 1;
-            if (taskNumber < 0 || taskNumber >= counter) {
+            if (taskNumber < 0 || taskNumber >= tasks.size()) {
                 throw new RoshanException("OOPS!!! Task number " + (taskNumber + 1) + " does not exist.");
             }
-            tasks[taskNumber].markAsDone();
+            tasks.get(taskNumber).markAsDone();
             System.out.println("Nice! I've marked this task as done:");
-            System.out.println("  " + tasks[taskNumber]);
+            System.out.println("  " + tasks.get(taskNumber));
         } catch (NumberFormatException e) {
             throw new RoshanException("OOPS!!! Please provide a valid task number.");
         }
-        return counter;
     }
 
-    private static int handleUnmark(String input, Task[] tasks, int counter) throws RoshanException {
+    private static void handleUnmark(String input, ArrayList<Task> tasks) throws RoshanException {
         String taskNumberStr = input.substring(7).trim();
         if (taskNumberStr.isEmpty()) {
             throw new RoshanException("OOPS!!! Please specify which task to unmark.");
         }
         try {
             int taskNumber = Integer.parseInt(taskNumberStr) - 1;
-            if (taskNumber < 0 || taskNumber >= counter) {
+            if (taskNumber < 0 || taskNumber >= tasks.size()) {
                 throw new RoshanException("OOPS!!! Task number " + (taskNumber + 1) + " does not exist.");
             }
-            tasks[taskNumber].markAsNotDone();
+            tasks.get(taskNumber).markAsNotDone();
             System.out.println("OK, I've marked this task as not done yet:");
-            System.out.println("  " + tasks[taskNumber]);
+            System.out.println("  " + tasks.get(taskNumber));
         } catch (NumberFormatException e) {
             throw new RoshanException("OOPS!!! Please provide a valid task number.");
         }
-        return counter;
     }
 
-    private static int handleTodo(String input, Task[] tasks, int counter) throws RoshanException {
+    private static void handleDelete(String input, ArrayList<Task> tasks) throws RoshanException {
+        String taskNumberStr = input.substring(7).trim();
+        if (taskNumberStr.isEmpty()) {
+            throw new RoshanException("OOPS!!! Please specify which task to delete.");
+        }
+        try {
+            int taskNumber = Integer.parseInt(taskNumberStr) - 1;
+            if (taskNumber < 0 || taskNumber >= tasks.size()) {
+                throw new RoshanException("OOPS!!! Task number " + (taskNumber + 1) + " does not exist.");
+            }
+            Task removedTask = tasks.remove(taskNumber);
+            System.out.println("Noted. I've removed this task:");
+            System.out.println("  " + removedTask);
+            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        } catch (NumberFormatException e) {
+            throw new RoshanException("OOPS!!! Please provide a valid task number.");
+        }
+    }
+
+    private static void handleTodo(String input, ArrayList<Task> tasks) throws RoshanException {
         String description = input.substring(5).trim();
         if (description.isEmpty()) {
             throw new RoshanException("OOPS!!! The description of a todo cannot be empty.");
         }
-        if (counter >= 100) {
-            throw new RoshanException("OOPS!!! Task list is full. Cannot add more tasks.");
-        }
         Task newTask = new Todo(description);
-        tasks[counter] = newTask;
-        counter++;
+        tasks.add(newTask);
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + newTask);
-        System.out.println("Now you have " + counter + " tasks in the list.");
-        return counter;
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
     }
 
-    private static int handleDeadline(String input, Task[] tasks, int counter) throws RoshanException {
+    private static void handleDeadline(String input, ArrayList<Task> tasks) throws RoshanException {
         String commandContent = input.substring(9).trim();
         if (commandContent.isEmpty()) {
             throw new RoshanException("OOPS!!! The description of a deadline cannot be empty.");
@@ -138,19 +157,14 @@ public class Roshan {
         if (by.isEmpty()) {
             throw new RoshanException("OOPS!!! Please specify when the deadline is.");
         }
-        if (counter >= 100) {
-            throw new RoshanException("OOPS!!! Task list is full. Cannot add more tasks.");
-        }
         Task newTask = new Deadline(description, by);
-        tasks[counter] = newTask;
-        counter++;
+        tasks.add(newTask);
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + newTask);
-        System.out.println("Now you have " + counter + " tasks in the list.");
-        return counter;
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
     }
 
-    private static int handleEvent(String input, Task[] tasks, int counter) throws RoshanException {
+    private static void handleEvent(String input, ArrayList<Task> tasks) throws RoshanException {
         String commandContent = input.substring(6).trim();
         if (commandContent.isEmpty()) {
             throw new RoshanException("OOPS!!! The description of an event cannot be empty.");
@@ -169,15 +183,10 @@ public class Roshan {
         if (from.isEmpty() || to.isEmpty()) {
             throw new RoshanException("OOPS!!! Please specify when the event starts and ends.");
         }
-        if (counter >= 100) {
-            throw new RoshanException("OOPS!!! Task list is full. Cannot add more tasks.");
-        }
         Task newTask = new Event(description, from, to);
-        tasks[counter] = newTask;
-        counter++;
+        tasks.add(newTask);
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + newTask);
-        System.out.println("Now you have " + counter + " tasks in the list.");
-        return counter;
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
     }
 }
