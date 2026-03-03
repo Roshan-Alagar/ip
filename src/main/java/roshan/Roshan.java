@@ -1,5 +1,7 @@
 package roshan;
 
+import java.util.ArrayList;
+
 public class Roshan {
     private Storage storage;
     private TaskList tasks;
@@ -53,6 +55,10 @@ public class Roshan {
                 case "event":
                     handleEvent(input);
                     break;
+                case "find":
+                    handleFind(input);
+                    break;
+
                 default:
                     if (input.trim().equals("todo") || input.trim().equals("deadline")
                             || input.trim().equals("event")) {
@@ -120,6 +126,11 @@ public class Roshan {
         tasks.add(task);
         ui.showTaskAdded(task, tasks.size());
         storage.saveTasks(tasks.getTasks());
+    }
+    private void handleFind(String input) throws RoshanException {
+        String keyword = Parser.parseFind(input);
+        ArrayList<Task> foundTasks = tasks.find(keyword);
+        ui.showFoundTasks(foundTasks);
     }
 
     public static void main(String[] args) {
