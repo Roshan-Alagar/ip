@@ -1,10 +1,30 @@
 package roshan;
 
+/**
+ * Parses user input and extracts command details.
+ */
+
 public class Parser {
+
+    /**
+     * Extracts the command word from the full user input.
+     *
+     * @param fullCommand The full command string from user.
+     * @return The command word (first word).
+     */
 
     public static String getCommand(String fullCommand) {
         return fullCommand.split(" ")[0];
     }
+
+    /**
+     * Parses a task number from user input.
+     *
+     * @param input The user input string.
+     * @param startIndex The starting index to parse from.
+     * @return The task number (0-indexed).
+     * @throws RoshanException If the task number is invalid.
+     */
 
     public static int parseTaskNumber(String input, int startIndex) throws RoshanException {
         String taskNumberStr = input.substring(startIndex).trim();
@@ -18,6 +38,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a todo task from user input.
+     * @param input The user input string.
+     * @return The todo tasks (0-indexed).
+     * @throws RoshanException If the task number is invalid.
+     */
+
     public static Todo parseTodo(String input) throws RoshanException {
         String description = input.substring(5).trim();
         if (description.isEmpty()) {
@@ -25,6 +52,14 @@ public class Parser {
         }
         return new Todo(description);
     }
+
+    /**
+     * Parses a Deadline task from user input.
+     * @param input The user input string.
+     * @return The Deadline tasks (0-indexed).
+     * @throws RoshanException If the task number is invalid.
+     */
+
 
     public static Deadline parseDeadline(String input) throws RoshanException {
         String commandContent = input.substring(9).trim();
@@ -45,6 +80,13 @@ public class Parser {
         }
         return new Deadline(description, by);
     }
+
+    /**
+     * Parses a Event task from user input.
+     * @param input The user input string.
+     * @return The Event tasks (0-indexed).
+     * @throws RoshanException If the task number is invalid.
+     */
 
     public static Event parseEvent(String input) throws RoshanException {
         String commandContent = input.substring(6).trim();
@@ -67,6 +109,14 @@ public class Parser {
         }
         return new Event(description, from, to);
     }
+
+    /**
+     * Parses a Find task from user input.
+     * @param input The user input string.
+     * @return The Found tasks (0-indexed).
+     * @throws RoshanException If the task number is invalid.
+     */
+
     public static String parseFind(String input) throws RoshanException {
         String keyword = input.substring(5).trim();
         if (keyword.isEmpty()) {
