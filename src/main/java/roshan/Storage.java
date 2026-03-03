@@ -6,12 +6,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles loading and saving of tasks to a file.
+ * Manages persistent storage of task data.
+ */
+
 public class Storage {
     private final String filePath;
+
+    /**
+     * Creates a new Storage instance with the specified file path.
+     *
+     * @param filePath The path to the file where tasks are stored.
+     */
 
     public Storage(String filePath) {
         this.filePath = filePath;
     }
+
+    /**
+     * Loads tasks from the storage file.
+     * Creates the directory and file if they don't exist.
+     *
+     * @return ArrayList of tasks loaded from the file.
+     * @throws RoshanException If there is an error reading the file.
+     */
 
     public ArrayList<Task> loadTasks() throws RoshanException {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -48,6 +67,14 @@ public class Storage {
         }
         return tasks;
     }
+
+    /**
+     * Parses a single line from the file into a Task object.
+     *
+     * @param line The line from the file to parse.
+     * @return The parsed Task object.
+     * @throws RoshanException If the line format is invalid.
+     */
 
     private Task parseTask(String line) throws RoshanException {
         String[] parts = line.split(" \\| ");
@@ -89,6 +116,14 @@ public class Storage {
         return task;
     }
 
+    /**
+     * Saves the list of tasks to the storage file.
+     * Creates the directory and file if they don't exist.
+     *
+     * @param tasks The list of tasks to save.
+     * @throws RoshanException If there is an error writing to the file.
+     */
+
     public void saveTasks(ArrayList<Task> tasks) throws RoshanException {
         File file = new File(filePath);
 
@@ -108,6 +143,13 @@ public class Storage {
             throw new RoshanException("Error saving tasks to file: " + e.getMessage());
         }
     }
+
+    /**
+     * Formats a Task object into a string for file storage.
+     *
+     * @param task The task to format.
+     * @return String representation of the task for file storage.
+     */
 
     private String formatTask(Task task) {
         String taskType = "";
