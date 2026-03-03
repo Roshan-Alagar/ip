@@ -159,10 +159,10 @@ public class Storage {
             taskType = "T";
         } else if (task instanceof Deadline) {
             taskType = "D";
-            details = " | " + ((Deadline) task).by;
+            details = " | " + ((Deadline) task).getBy();
         } else if (task instanceof Event) {
             taskType = "E";
-            details = " | " + ((Event) task).from + " | " + ((Event) task).to;
+            details = " | " + ((Event) task).getFrom() + " | " + ((Event) task).getTo();
         }
 
         String isDone = task.isDone ? "1" : "0";
