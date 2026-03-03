@@ -67,4 +67,11 @@ public class Parser {
         }
         return new Event(description, from, to);
     }
+    public static String parseFind(String input) throws RoshanException {
+        String keyword = input.substring(5).trim();
+        if (keyword.isEmpty()) {
+            throw new RoshanException("OOPS!!! The search keyword cannot be empty.");
+        }
+        return keyword;
+    }
 }
