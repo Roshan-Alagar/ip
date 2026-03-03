@@ -48,14 +48,18 @@ Format: `deadline DESCRIPTION /by DEADLINE`
 
 Example:
 ```
+deadline return book /by 2026-03-01
+```
+or
+```
 deadline return book /by Sunday
 ```
 
-Expected output:
+Expected output with date:
 ```
  ____________________________________________________________
  Got it. I've added this task:
-   [D][ ] return book (by: Sunday)
+   [D][ ] return book (by: Mar 01 2026)
  Now you have 2 tasks in the list.
  ____________________________________________________________
 ```
@@ -183,6 +187,30 @@ Expected output:
  Here are the matching tasks in your list:
  1.[T][ ] read book
  2.[E][ ] book club (from: Mon to: Tue)
+ ____________________________________________________________
+```
+
+---
+
+### Finding tasks by date: `on` *(optional)*
+
+Finds all deadlines and events occurring on a specific date.
+
+Format: `on DATE`
+
+- DATE must be in `yyyy-MM-dd` format
+
+Example:
+```
+on 2024-12-01
+```
+
+Expected output:
+```
+ ____________________________________________________________
+ Here are the matching tasks in your list:
+ 1.[D][ ] return book (by: Dec 01 2024)
+ 2.[E][ ] project meeting (from: Dec 01 2024 to: Dec 02 2024)
  ____________________________________________________________
 ```
 

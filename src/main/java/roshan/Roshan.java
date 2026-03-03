@@ -72,6 +72,10 @@ public class Roshan {
                 case "find":
                     handleFind(input);
                     break;
+                case "on":
+                    handleOn(input);
+                    break;
+
 
                 default:
                     if (input.trim().equals("todo") || input.trim().equals("deadline")
@@ -194,6 +198,21 @@ public class Roshan {
     private void handleFind(String input) throws RoshanException {
         String keyword = Parser.parseFind(input);
         ArrayList<Task> foundTasks = tasks.find(keyword);
+        ui.showFoundTasks(foundTasks);
+    }
+
+    /**
+     * Handles the on command to find tasks on a specific date.
+     *
+     * @param input The user input containing the date.
+     * @throws RoshanException If the date format is invalid.
+     */
+    private void handleOn(String input) throws RoshanException {
+        String date = input.substring(3).trim();
+        if (date.isEmpty()) {
+            throw new RoshanException("OOPS!!! Please specify a date in yyyy-MM-dd format.");
+        }
+        ArrayList<Task> foundTasks = tasks.findByDate(date);
         ui.showFoundTasks(foundTasks);
     }
 

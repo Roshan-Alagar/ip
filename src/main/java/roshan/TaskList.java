@@ -1,5 +1,7 @@
 package roshan;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 /**
@@ -93,6 +95,35 @@ public class TaskList {
             if (task.description.contains(keyword)) {
                 matchingTasks.add(task);
             }
+        }
+        return matchingTasks;
+    }
+    /**
+     * Finds all tasks occurring on a specific date.
+     *
+     * @param date The date to search for in yyyy-MM-dd format.
+     * @return ArrayList of tasks occurring on that date.
+     */
+    public ArrayList<Task> findByDate(String date) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+        try {
+            LocalDate searchDate = LocalDate.parse(date);
+            for (Task task : tasks) {
+                if (task instanceof Deadline) {
+                    Deadline deadline = (Deadline) task;
+                    if (deadline.byDate != null && deadline.byDate.equals(searchDate)) {
+                        matchingTasks.add(task);
+                    }
+                } else if (task instanceof Event) {
+                    Event event = (Event) task;
+                    if ((event.fromDate != null && !event.fromDate.isAfter(searchDate))
+                            && (event.toDate != null && !event.toDate.isBefore(searchDate))) {
+                        matchingTasks.add(task);
+                    }
+                }
+            }
+        } catch (DateTimeParseException e) {
+            // Invalid date format, return empty list
         }
         return matchingTasks;
     }
