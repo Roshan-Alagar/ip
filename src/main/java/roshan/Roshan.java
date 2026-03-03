@@ -1,11 +1,21 @@
 package roshan;
 
 import java.util.ArrayList;
+/**
+ * Main class for the Roshan chatbot application.
+ * Handles initialization and coordination of UI, storage, and task management.
+ */
 
 public class Roshan {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
+
+    /**
+     * Creates a new Roshan instance with the specified file path for data storage.
+     *
+     * @param filePath The file path where tasks are stored.
+     */
 
     public Roshan(String filePath) {
         ui = new Ui();
@@ -17,6 +27,10 @@ public class Roshan {
             tasks = new TaskList();
         }
     }
+
+    /**
+     * Runs the main loop of the chatbot, processing user commands until exit.
+     */
 
     public void run() {
         ui.showWelcome();
@@ -77,6 +91,13 @@ public class Roshan {
         }
     }
 
+    /**
+     * Handles the mark command to mark a task as done.
+     *
+     * @param input The user input containing the task number.
+     * @throws RoshanException If the task number is invalid.
+     */
+
     private void handleMark(String input) throws RoshanException {
         int taskNumber = Parser.parseTaskNumber(input, 5);
         if (taskNumber < 0 || taskNumber >= tasks.size()) {
@@ -86,6 +107,13 @@ public class Roshan {
         ui.showTaskMarked(tasks.get(taskNumber));
         storage.saveTasks(tasks.getTasks());
     }
+
+    /**
+     * Handles the unmark command to unmark a task.
+     *
+     * @param input The user input containing the task number.
+     * @throws RoshanException If the task number is invalid.
+     */
 
     private void handleUnmark(String input) throws RoshanException {
         int taskNumber = Parser.parseTaskNumber(input, 7);
@@ -97,6 +125,13 @@ public class Roshan {
         storage.saveTasks(tasks.getTasks());
     }
 
+    /**
+     * Handles the delete command to delete a task.
+     *
+     * @param input The user input containing the task number.
+     * @throws RoshanException If the task number is invalid.
+     */
+
     private void handleDelete(String input) throws RoshanException {
         int taskNumber = Parser.parseTaskNumber(input, 7);
         if (taskNumber < 0 || taskNumber >= tasks.size()) {
@@ -107,12 +142,26 @@ public class Roshan {
         storage.saveTasks(tasks.getTasks());
     }
 
+    /**
+     * Handles the todo command for a task that needs to be done.
+     *
+     * @param input The user input containing the task number.
+     * @throws RoshanException If the task number is invalid.
+     */
+
     private void handleTodo(String input) throws RoshanException {
         Todo task = Parser.parseTodo(input);
         tasks.add(task);
         ui.showTaskAdded(task, tasks.size());
         storage.saveTasks(tasks.getTasks());
     }
+
+    /**
+     * Handles the deadline command for a task with a deadline.
+     *
+     * @param input The user input containing the task number.
+     * @throws RoshanException If the task number is invalid.
+     */
 
     private void handleDeadline(String input) throws RoshanException {
         Deadline task = Parser.parseDeadline(input);
@@ -121,17 +170,38 @@ public class Roshan {
         storage.saveTasks(tasks.getTasks());
     }
 
+    /**
+     * Handles the event command for a task that is an event.
+     *
+     * @param input The user input containing the task number.
+     * @throws RoshanException If the task number is invalid.
+     */
+
     private void handleEvent(String input) throws RoshanException {
         Event task = Parser.parseEvent(input);
         tasks.add(task);
         ui.showTaskAdded(task, tasks.size());
         storage.saveTasks(tasks.getTasks());
     }
+
+    /**
+     * Handles the find command for a task that needs to be found.
+     *
+     * @param input The user input containing the task number.
+     * @throws RoshanException If the task number is invalid.
+     */
+
     private void handleFind(String input) throws RoshanException {
         String keyword = Parser.parseFind(input);
         ArrayList<Task> foundTasks = tasks.find(keyword);
         ui.showFoundTasks(foundTasks);
     }
+
+    /**
+     * Main entry point of the application.
+     *
+     * @param args Command line arguments (not used).
+     */
 
     public static void main(String[] args) {
         new Roshan("./data/roshan.txt").run();
